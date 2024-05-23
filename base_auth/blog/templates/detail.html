@@ -8,7 +8,11 @@
     last viewed: {{post.last_viewed_datetime}} , by:
     {{post.last_viewed_user.username}}
   </div>
-  <div class="detail_content">내용: {{post.content}}</div>
+  <div class="detail_content">내용: {{post.content}}
+    {% if post.image_url %}
+  <img src="{{post.image_url}}" alt="image" />
+  {% endif %}
+  </div>
   <div class="detail-post_btn">
     <a href="{% url 'home' %}">홈 화면</a>
     <a href="{% url 'edit' post.pk %}">수정하기</a>
@@ -29,8 +33,6 @@
     <span>{{comment.content}}</span>
     <a href="{% url 'delete_comment' post.pk  %}">삭제</a>
   </li>
-  {% endfor %} {% if post.image_url %}
-  <img src="{{post.image_url}}" alt="image" />
-  {% endif %}
+  {% endfor %}
 </div>
 {% endblock %}
