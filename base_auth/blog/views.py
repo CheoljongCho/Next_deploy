@@ -48,7 +48,17 @@ def detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     if request.method == "POST":
         content = request.POST["content"]
-        Comment.objects.create(post=post, content=content, creator=request.user)
+        image = request.FILES.get("image")
+
+        new_comment = Comment.objects.create(post=post, content=content, creator=request.user)
+
+        if image:
+            # image_name = get_new_file_name(image, request.user, new_comment.pk) # 생략 가능
+            saved_path = default_storage.save(image.name, image) # 기본 파일 이름 사용
+            image_url = default_storage.url(saved_path)
+            new_comment.image_url = image_url
+            new_comment.save()
+        
         return redirect("detail", post_pk)
 
     return render(request, "detail.html", {"post": post})
